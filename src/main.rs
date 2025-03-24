@@ -1,5 +1,5 @@
 fn main() {
-    let mut stack: Vec<i32> = vec![];
+    let mut stack: Vec<i16> = vec![];
 
     stack.push(20);
     stack.push(10);
@@ -12,7 +12,7 @@ fn main() {
     println!("El último elemento de la pila es: {:?}", stack.pop());
 }
 
-fn apply_operation(stack: &mut Vec<i32>, operator: &str) {
+fn apply_operation(stack: &mut Vec<i16>, operator: &str) {
     match operator {
         "+" => apply_sum(stack),
         "-" => apply_subtraction(stack),
@@ -22,9 +22,9 @@ fn apply_operation(stack: &mut Vec<i32>, operator: &str) {
     }
 }
 
-fn apply_sum(stack: &mut Vec<i32>) {
-    let number_1: Option<i32> = stack.pop();
-    let number_2: Option<i32> = stack.pop();
+fn apply_sum(stack: &mut Vec<i16>) {
+    let number_1: Option<i16> = stack.pop();
+    let number_2: Option<i16> = stack.pop();
 
     match (number_1, number_2) {
         (Some(a), Some(b)) => stack.push(b + a),
@@ -32,9 +32,9 @@ fn apply_sum(stack: &mut Vec<i32>) {
     }
 }
 
-fn apply_subtraction(stack: &mut Vec<i32>) {
-    let number_1: Option<i32> = stack.pop();
-    let number_2: Option<i32> = stack.pop();
+fn apply_subtraction(stack: &mut Vec<i16>) {
+    let number_1: Option<i16> = stack.pop();
+    let number_2: Option<i16> = stack.pop();
 
     match (number_1, number_2) {
         (Some(a), Some(b)) => stack.push(b - a),
@@ -42,9 +42,9 @@ fn apply_subtraction(stack: &mut Vec<i32>) {
     }
 }
 
-fn apply_multiplication(stack: &mut Vec<i32>) {
-    let number_1: Option<i32> = stack.pop();
-    let number_2: Option<i32> = stack.pop();
+fn apply_multiplication(stack: &mut Vec<i16>) {
+    let number_1: Option<i16> = stack.pop();
+    let number_2: Option<i16> = stack.pop();
 
     match (number_1, number_2) {
         (Some(a), Some(b)) => stack.push(b * a),
@@ -52,9 +52,9 @@ fn apply_multiplication(stack: &mut Vec<i32>) {
     }
 }
 
-fn apply_division(stack: &mut Vec<i32>) {
-    let number_1: Option<i32> = stack.pop();
-    let number_2: Option<i32> = stack.pop();
+fn apply_division(stack: &mut Vec<i16>) {
+    let number_1: Option<i16> = stack.pop();
+    let number_2: Option<i16> = stack.pop();
 
     match (number_1, number_2) {
         (Some(a), Some(b)) => stack.push(b / a),
