@@ -1,4 +1,4 @@
-use crate::stack::Stack; // Importa Stack desde el módulo stack
+use crate::stack::Stack;
 
 pub fn apply_operation(stack: &mut Stack, operator: &str) {
     if stack.len() < 2 {
@@ -7,15 +7,15 @@ pub fn apply_operation(stack: &mut Stack, operator: &str) {
     }
 
     match operator {
-        "+" => apply_sum(stack),
-        "-" => apply_subtraction(stack),
-        "*" => apply_multiplication(stack),
-        "/" => apply_division(stack),
+        "+" => sum(stack),
+        "-" => subtraction(stack),
+        "*" => multiplication(stack),
+        "/" => division(stack),
         _ => println!("Operador no reconocido, operadores admitidos: + - * /"),
     }
 }
 
-fn apply_sum(stack: &mut Stack) {
+fn sum(stack: &mut Stack) {
     let number_1: Option<i16> = stack.pop();
     let number_2: Option<i16> = stack.pop();
 
@@ -25,7 +25,7 @@ fn apply_sum(stack: &mut Stack) {
     }
 }
 
-fn apply_subtraction(stack: &mut Stack) {
+fn subtraction(stack: &mut Stack) {
     let number_1: Option<i16> = stack.pop();
     let number_2: Option<i16> = stack.pop();
 
@@ -35,7 +35,7 @@ fn apply_subtraction(stack: &mut Stack) {
     }
 }
 
-fn apply_multiplication(stack: &mut Stack) {
+fn multiplication(stack: &mut Stack) {
     let number_1: Option<i16> = stack.pop();
     let number_2: Option<i16> = stack.pop();
 
@@ -45,7 +45,7 @@ fn apply_multiplication(stack: &mut Stack) {
     }
 }
 
-fn apply_division(stack: &mut Stack) {
+fn division(stack: &mut Stack) {
     let number_1: Option<i16> = stack.pop();
     let number_2: Option<i16> = stack.pop();
 
