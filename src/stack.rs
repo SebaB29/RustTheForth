@@ -24,10 +24,6 @@ impl Stack {
         self.elements.pop()
     }
 
-    pub fn peek(&mut self) -> Option<i16> {
-        self.elements.last().copied()
-    }
-
     pub fn len(&self) -> usize {
         self.elements.len()
     }
