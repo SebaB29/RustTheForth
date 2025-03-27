@@ -1,4 +1,5 @@
-use crate::operations::apply_operation;
+use crate::arithmetic_operations::apply_operation;
+use crate::forth_basic_operations::apply_forth_operation;
 use crate::stack::Stack;
 use std::env;
 use std::fs;
@@ -54,6 +55,7 @@ fn read_file(filename: String) -> Result<String, String> {
 fn execute(stack: &mut Stack, input: String) {
     for token in input.split_whitespace() {
         match token {
+            "dup" | "drop" | "swap" | "over" | "rot" => apply_forth_operation(stack, token),
             "+" | "-" | "*" | "/" => apply_operation(stack, token),
             "CR" => println!(),
             "." => {
@@ -69,5 +71,8 @@ fn execute(stack: &mut Stack, input: String) {
                 }
             }
         }
+    }
+    while let Some(value) = stack.pop() {
+        println!("{} ", value)
     }
 }
