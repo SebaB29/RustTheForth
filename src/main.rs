@@ -1,4 +1,5 @@
 mod arithmetic_operations;
+mod file_handling;
 mod forth_basic_operations;
 mod program;
 mod stack;
