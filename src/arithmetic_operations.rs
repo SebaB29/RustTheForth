@@ -2,7 +2,7 @@ use crate::stack::Stack;
 
 pub fn apply_operation(stack: &mut Stack, operator: &str) {
     if stack.len() < 2 {
-        println!("Operadores Insuficientes.");
+        println!("Error: No hay suficientes elementos en la Pila");
         return;
     }
 
@@ -11,46 +11,32 @@ pub fn apply_operation(stack: &mut Stack, operator: &str) {
         "-" => subtraction(stack),
         "*" => multiplication(stack),
         "/" => division(stack),
-        _ => println!("Operador no reconocido, operadores admitidos: + - * /"),
+        _ => {}
     }
 }
 
 fn sum(stack: &mut Stack) {
-    let number_1: Option<i16> = stack.pop();
-    let number_2: Option<i16> = stack.pop();
-
-    match (number_1, number_2) {
-        (Some(a), Some(b)) => stack.push(b + a),
-        _ => println!("Error: No hay suficientes elementos en la pila"),
+    if let (Some(a), Some(b)) = (stack.pop(), stack.pop()) {
+        stack.push(b + a);
     }
 }
 
 fn subtraction(stack: &mut Stack) {
-    let number_1: Option<i16> = stack.pop();
-    let number_2: Option<i16> = stack.pop();
-
-    match (number_1, number_2) {
-        (Some(a), Some(b)) => stack.push(b - a),
-        _ => println!("Error: No hay suficientes elementos en la pila"),
+    if let (Some(a), Some(b)) = (stack.pop(), stack.pop()) {
+        stack.push(b - a);
     }
 }
 
 fn multiplication(stack: &mut Stack) {
-    let number_1: Option<i16> = stack.pop();
-    let number_2: Option<i16> = stack.pop();
-
-    match (number_1, number_2) {
-        (Some(a), Some(b)) => stack.push(b * a),
-        _ => println!("Error: No hay suficientes elementos en la pila"),
+    if let (Some(a), Some(b)) = (stack.pop(), stack.pop()) {
+        stack.push(b * a);
     }
 }
 
 fn division(stack: &mut Stack) {
-    let number_1: Option<i16> = stack.pop();
-    let number_2: Option<i16> = stack.pop();
-
-    match (number_1, number_2) {
+    match (stack.pop(), stack.pop()) {
+        (Some(0), Some(_)) => println!("Error: División por cero"),
         (Some(a), Some(b)) => stack.push(b / a),
-        _ => println!("Error: No hay suficientes elementos en la pila"),
+        _ => {}
     }
 }
