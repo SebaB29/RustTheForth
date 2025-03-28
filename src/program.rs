@@ -1,23 +1,10 @@
 use crate::arithmetic_operations::apply_operation;
+use crate::file_handling::read_file;
 use crate::forth_basic_operations::apply_forth_operation;
 use crate::stack::Stack;
 use std::env;
-use std::fs;
 
 const DEFAULT_STACK_SIZE: usize = 128 * 1024;
-
-pub fn parse_args() -> Result<(String, usize), String> {
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() < 2 {
-        return Err("Error: Debes especificar un archivo .fth".to_string());
-    }
-
-    let filename = args[1].clone();
-    let stack_size = parse_stack_size(&args);
-
-    Ok((filename, stack_size))
-}
 
 pub fn execute_program(stack_size: usize, filename: String) {
     let mut stack = Stack::new(stack_size);
@@ -27,6 +14,17 @@ pub fn execute_program(stack_size: usize, filename: String) {
         }
         Err(error_msg) => println!("{}", error_msg),
     }
+}
+
+pub fn parse_args() -> Result<(String, usize), String> {
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        return Err("Error: Debes especificar un archivo .fth".to_string());
+    }
+
+    let filename = args[1].clone();
+    let stack_size = parse_stack_size(&args);
+    Ok((filename, stack_size))
 }
 
 fn parse_stack_size(args: &[String]) -> usize {
@@ -39,17 +37,8 @@ fn parse_stack_size(args: &[String]) -> usize {
             }
         }
     }
-    DEFAULT_STACK_SIZE
-}
 
-fn read_file(filename: String) -> Result<String, String> {
-    match fs::read_to_string(&filename) {
-        Ok(content) => Ok(content),
-        Err(error_msg) => Err(format!(
-            "Error al leer el archivo '{}': {}",
-            filename, error_msg
-        )),
-    }
+    DEFAULT_STACK_SIZE
 }
 
 fn execute(stack: &mut Stack, input: String) {
@@ -71,8 +60,5 @@ fn execute(stack: &mut Stack, input: String) {
                 }
             }
         }
-    }
-    while let Some(value) = stack.pop() {
-        println!("{} ", value)
     }
 }
