@@ -6,10 +6,8 @@ pub fn apply_forth_operation(stack: &mut Stack, operator: &str) {
         "drop" => drop(stack),
         "swap" => swap(stack),
         "over" => over(stack),
-        "rot" => rot(stack),
-        _ => {
-            println!("Operador no reconocido, operadores admitidos: dup | drop | swap | over | rot")
-        }
+        // "rot" => rot(stack),
+        _ => {}
     }
 }
 
@@ -30,26 +28,30 @@ fn drop(stack: &mut Stack) {
 }
 
 fn swap(stack: &mut Stack) {
-    match (stack.pop(), stack.pop()) {
-        (Some(value_1), Some(value_2)) => {
-            stack.push(value_1);
-            stack.push(value_2);
-        }
-        _ => println!("No hay suficientes elementos en la Pila."),
+    if stack.len() < 2 {
+        println!("No hay suficientes elementos en la Pila.");
+        return;
+    }
+
+    if let (Some(value_1), Some(value_2)) = (stack.pop(), stack.pop()) {
+        stack.push(value_1);
+        stack.push(value_2);
     }
 }
 
 fn over(stack: &mut Stack) {
-    match (stack.pop(), stack.pop()) {
-        (Some(value_1), Some(value_2)) => {
-            stack.push(value_2);
-            stack.push(value_1);
-            stack.push(value_2);
-        }
-        _ => println!("No hay suficientes elementos en la Pila."),
+    if stack.len() < 2 {
+        println!("No hay suficientes elementos en la Pila.");
+        return;
+    }
+
+    if let (Some(value_1), Some(value_2)) = (stack.pop(), stack.pop()) {
+        stack.push(value_2);
+        stack.push(value_1);
+        stack.push(value_2);
     }
 }
 
-fn rot(stack: &mut Stack) {
-    let aux_stack = Stack::new(128 * 1024);
-}
+// fn rot(stack: &mut Stack) {
+//     let aux_stack = Stack::new(128 * 1024);
+// }
