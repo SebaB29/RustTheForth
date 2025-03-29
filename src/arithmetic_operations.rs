@@ -1,6 +1,6 @@
 use crate::stack::Stack;
 
-pub fn apply_operation(stack: &mut Stack, operator: &str) {
+pub fn apply_arithmetic_operation(stack: &mut Stack, operator: &str) {
     if stack.len() < 2 {
         println!("Error: No hay suficientes elementos en la Pila");
         return;

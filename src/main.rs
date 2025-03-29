@@ -2,6 +2,7 @@ mod arithmetic_operations;
 mod boolean_operations;
 mod file_handling;
 mod forth_basic_operations;
+mod output_operations;
 mod program;
 mod stack;
 

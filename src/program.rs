@@ -1,7 +1,8 @@
-use crate::arithmetic_operations::apply_operation;
+use crate::arithmetic_operations::apply_arithmetic_operation;
 use crate::boolean_operations::apply_boolean_operation;
 use crate::file_handling::read_file;
 use crate::forth_basic_operations::apply_forth_operation;
+use crate::output_operations::apply_output_operation;
 use crate::stack::Stack;
 use std::env;
 
@@ -45,22 +46,19 @@ fn parse_stack_size(args: &[String]) -> usize {
 fn execute_operation(stack: &mut Stack, input: String) {
     for token in input.split_whitespace() {
         match token {
-            "dup" | "drop" | "swap" | "over" | "rot" => apply_forth_operation(stack, token),
-            "+" | "-" | "*" | "/" => apply_operation(stack, token),
+            "+" | "-" | "*" | "/" => apply_arithmetic_operation(stack, token),
             "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, token),
-            "CR" => println!(),
-            "." => {
-                if let Some(value) = stack.pop() {
-                    println!("{}", value);
-                }
-            }
-            _ => {
-                if let Ok(number) = token.parse::<i16>() {
-                    stack.push(number);
-                } else {
-                    println!("Error: Token no reconocido '{}'", token);
-                }
-            }
+            "dup" | "drop" | "swap" | "over" | "rot" => apply_forth_operation(stack, token),
+            "CR" | "." => apply_output_operation(stack, token),
+            _ => default_operation(stack, token),
         }
+    }
+}
+
+fn default_operation(stack: &mut Stack, token: &str) {
+    if let Ok(number) = token.parse::<i16>() {
+        stack.push(number);
+    } else {
+        println!("Error: Token no reconocido '{}'", token);
     }
 }
