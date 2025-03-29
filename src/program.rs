@@ -1,4 +1,5 @@
 use crate::arithmetic_operations::apply_operation;
+use crate::boolean_operations::apply_boolean_operation;
 use crate::file_handling::read_file;
 use crate::forth_basic_operations::apply_forth_operation;
 use crate::stack::Stack;
@@ -10,7 +11,7 @@ pub fn execute_program(stack_size: usize, filename: String) {
     let mut stack = Stack::new(stack_size);
     match read_file(filename) {
         Ok(content) => {
-            execute(&mut stack, content);
+            execute_operation(&mut stack, content);
         }
         Err(error_msg) => println!("{}", error_msg),
     }
@@ -41,11 +42,12 @@ fn parse_stack_size(args: &[String]) -> usize {
     DEFAULT_STACK_SIZE
 }
 
-fn execute(stack: &mut Stack, input: String) {
+fn execute_operation(stack: &mut Stack, input: String) {
     for token in input.split_whitespace() {
         match token {
             "dup" | "drop" | "swap" | "over" | "rot" => apply_forth_operation(stack, token),
             "+" | "-" | "*" | "/" => apply_operation(stack, token),
+            "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, token),
             "CR" => println!(),
             "." => {
                 if let Some(value) = stack.pop() {
