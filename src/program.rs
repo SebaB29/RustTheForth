@@ -1,6 +1,6 @@
 use crate::arithmetic_operations::apply_arithmetic_operation;
 use crate::boolean_operations::apply_boolean_operation;
-use crate::file_handling::read_file;
+use crate::file_handling::{read_file, save_stack_to_file};
 use crate::forth_basic_operations::apply_forth_operation;
 use crate::output_operations::apply_output_operation;
 use crate::stack::Stack;
@@ -11,9 +11,19 @@ const DEFAULT_STACK_SIZE: usize = 128 * 1024;
 pub fn execute_program(stack_size: usize, filename: String) -> Result<(), String> {
     let mut stack = Stack::new(stack_size);
     match read_file(filename) {
-        Ok(content) => execute_operation(&mut stack, content),
-        Err(error_msg) => Err(error_msg),
+        Ok(content) => {
+            if let Err(error_msg) = execute_operation(&mut stack, content) {
+                return Err(error_msg);
+            }
+
+            if let Err(e) = save_stack_to_file(&mut stack, "stack.fth") {
+                return Err(format!("Error al guardar la pila en el archivo: {}", e));
+            }
+        },
+        Err(error_msg) => return Err(error_msg),
     }
+
+    Ok(())
 }
 
 pub fn parse_args() -> Result<(String, usize), String> {
