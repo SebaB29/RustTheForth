@@ -60,6 +60,26 @@ mod forth_operations_test {
     }
 
     #[test]
+    fn test_rot() {
+        let mut stack = setup_stack();
+
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        stack.push(4);
+        stack.push(5);
+
+        let result = apply_forth_operation(&mut stack, "ROT");
+
+        assert_eq!(result, Ok(()));
+        assert_eq!(stack.pop(), Some(1)); // El elemento que estaba en la base ahora está en la cima
+        assert_eq!(stack.pop(), Some(5));
+        assert_eq!(stack.pop(), Some(4));
+        assert_eq!(stack.pop(), Some(3));
+        assert_eq!(stack.pop(), Some(2));
+    }
+
+    #[test]
     fn test_dup_not_enough_elements() {
         let mut stack = setup_stack();
 

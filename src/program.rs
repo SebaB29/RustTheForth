@@ -38,6 +38,28 @@ pub fn parse_args() -> Result<(String, usize), String> {
     Ok((filename, stack_size))
 }
 
+pub fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String> {
+    let mut tokens = input.split_whitespace();
+
+    while let Some(token) = tokens.next() {
+        let token_upc = token.to_uppercase();
+        let result = match token_upc.as_str() {
+            "+" | "-" | "*" | "/" => apply_arithmetic_operation(stack, &token_upc),
+            "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, &token_upc),
+            "DUP" | "DROP" | "SWAP" | "OVER" | "ROT" => apply_forth_operation(stack, &token_upc),
+            "CR" | "." => apply_output_operation(stack, &token_upc),
+            "IF" | "THEN" => apply_conditional_operation(stack, &token_upc, &mut tokens),
+            _ => default_operation(stack, &token_upc),
+        };
+
+        if let Err(error_msg) = result {
+            return Err(error_msg);
+        }
+    }
+
+    Ok(())
+}
+
 fn parse_stack_size(args: &[String]) -> usize {
     for arg in args {
         if arg.starts_with("stack-size=") {
@@ -50,28 +72,6 @@ fn parse_stack_size(args: &[String]) -> usize {
     }
 
     DEFAULT_STACK_SIZE
-}
-
-pub fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String> {
-    let mut tokens = input.split_whitespace();
-
-    while let Some(token) = tokens.next() {
-        let token_upc = token.to_uppercase();
-        let result = match token_upc.as_str() {
-            "+" | "-" | "*" | "/" => apply_arithmetic_operation(stack, &token_upc),
-            "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, &token_upc),
-            "DUP" | "DROP" | "SWAP" | "OVER" => apply_forth_operation(stack, &token_upc),
-            "CR" | "." => apply_output_operation(stack, &token_upc),
-            "IF" | "THEN" => apply_conditional_operation(stack, &token_upc, &mut tokens),
-            _ => default_operation(stack, &token_upc),
-        };
-
-        if let Err(error_msg) = result {
-            return Err(error_msg);
-        }
-    }
-
-    Ok(())
 }
 
 fn default_operation(stack: &mut Stack, token: &str) -> Result<(), String> {
