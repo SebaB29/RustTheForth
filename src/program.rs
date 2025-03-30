@@ -47,7 +47,7 @@ fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String> {
         let result = match token_upc.as_str() {
             "+" | "-" | "*" | "/" => apply_arithmetic_operation(stack, &token_upc),
             "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, &token_upc),
-            "DUP" | "DROP" | "SWAP" | "OVER"  => apply_forth_operation(stack, &token_upc),
+            "DUP" | "DROP" | "SWAP" | "OVER" => apply_forth_operation(stack, &token_upc),
             "CR" | "." => apply_output_operation(stack, &token_upc),
             _ => default_operation(stack, &token_upc),
         };

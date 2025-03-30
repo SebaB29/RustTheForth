@@ -96,7 +96,10 @@ mod boolean_operations_test {
         let mut stack = setup_stack();
 
         let result = apply_boolean_operation(&mut stack, "=");
-        assert_eq!(result, Err("Error: No hay suficientes elementos en la pila".to_string()));
+        assert_eq!(
+            result,
+            Err("Error: No hay suficientes elementos en la pila".to_string())
+        );
     }
 
     #[test]
@@ -104,7 +107,10 @@ mod boolean_operations_test {
         let mut stack = setup_stack();
 
         let result = apply_boolean_operation(&mut stack, "AND");
-        assert_eq!(result, Err("Error: No hay suficientes elementos en la pila".to_string()));
+        assert_eq!(
+            result,
+            Err("Error: No hay suficientes elementos en la pila".to_string())
+        );
     }
 
     #[test]
@@ -112,6 +118,9 @@ mod boolean_operations_test {
         let mut stack = setup_stack();
 
         let result = apply_boolean_operation(&mut stack, "INVALID_OP");
-        assert_eq!(result, Err("Error: Operador booleano no reconocido".to_string()));
+        assert_eq!(
+            result,
+            Err("Error: Operador booleano no reconocido".to_string())
+        );
     }
 }

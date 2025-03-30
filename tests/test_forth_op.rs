@@ -64,7 +64,10 @@ mod forth_operations_test {
         let mut stack = setup_stack();
 
         let result = apply_forth_operation(&mut stack, "DUP");
-        assert_eq!(result, Err("Error: No hay suficientes elementos en la pila".to_string()));
+        assert_eq!(
+            result,
+            Err("Error: No hay suficientes elementos en la pila".to_string())
+        );
     }
 
     #[test]
@@ -74,7 +77,10 @@ mod forth_operations_test {
         stack.push(1);
 
         let result = apply_forth_operation(&mut stack, "SWAP");
-        assert_eq!(result, Err("Error: No hay suficientes elementos en la pila".to_string()));
+        assert_eq!(
+            result,
+            Err("Error: No hay suficientes elementos en la pila".to_string())
+        );
     }
 
     #[test]
@@ -82,6 +88,9 @@ mod forth_operations_test {
         let mut stack = setup_stack();
 
         let result = apply_forth_operation(&mut stack, "invalid_operator");
-        assert_eq!(result, Err("Error: Operación Forth no reconocida".to_string()));
+        assert_eq!(
+            result,
+            Err("Error: Operación Forth no reconocida".to_string())
+        );
     }
 }

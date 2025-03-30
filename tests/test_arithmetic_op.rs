@@ -75,7 +75,10 @@ mod arithmetic_operations_test {
         stack.push(2);
 
         let result = apply_arithmetic_operation(&mut stack, "+");
-        assert_eq!(result, Err("Error: No hay suficientes elementos en la pila".to_string()));
+        assert_eq!(
+            result,
+            Err("Error: No hay suficientes elementos en la pila".to_string())
+        );
     }
 
     #[test]
