@@ -1,57 +1,53 @@
 use crate::stack::Stack;
 
-pub fn apply_forth_operation(stack: &mut Stack, operator: &str) {
+pub fn apply_forth_operation(stack: &mut Stack, operator: &str) -> Result<(), String> {
     match operator {
-        "dup" => dup(stack),
-        "drop" => drop(stack),
-        "swap" => swap(stack),
-        "over" => over(stack),
-        // "rot" => rot(stack),
-        _ => {}
+        "DUP" => dup(stack),
+        "DROP" => drop(stack),
+        "SWAP" => swap(stack),
+        "OVER" => over(stack),
+        _ => Err("Error: Operación Forth no reconocida".to_string()),
     }
 }
 
-fn dup(stack: &mut Stack) {
+fn dup(stack: &mut Stack) -> Result<(), String> {
     match stack.pop() {
         Some(value) => {
             stack.push(value);
             stack.push(value);
+            Ok(())
         }
-        _ => println!("No hay suficientes elementos en la Pila."),
+        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
     }
 }
 
-fn drop(stack: &mut Stack) {
+fn drop(stack: &mut Stack) -> Result<(), String> {
     if stack.pop().is_none() {
-        println!("La pila está vacía.");
+        Err("Error: La pila está vacía.".to_string())
+    } else {
+        Ok(())
     }
 }
 
-fn swap(stack: &mut Stack) {
-    if stack.len() < 2 {
-        println!("No hay suficientes elementos en la Pila.");
-        return;
-    }
-
-    if let (Some(value_1), Some(value_2)) = (stack.pop(), stack.pop()) {
-        stack.push(value_1);
-        stack.push(value_2);
-    }
-}
-
-fn over(stack: &mut Stack) {
-    if stack.len() < 2 {
-        println!("No hay suficientes elementos en la Pila.");
-        return;
-    }
-
-    if let (Some(value_1), Some(value_2)) = (stack.pop(), stack.pop()) {
-        stack.push(value_2);
-        stack.push(value_1);
-        stack.push(value_2);
+fn swap(stack: &mut Stack) -> Result<(), String> {
+    match (stack.pop(), stack.pop()) {
+        (Some(a), Some(b)) => {
+            stack.push(a);
+            stack.push(b);
+            Ok(())
+        }
+        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
     }
 }
 
-// fn rot(stack: &mut Stack) {
-//     let aux_stack = Stack::new(128 * 1024);
-// }
+fn over(stack: &mut Stack) -> Result<(), String> {
+    match (stack.pop(), stack.pop()) {
+        (Some(a), Some(b)) => {
+            stack.push(b);
+            stack.push(a);
+            stack.push(b);
+            Ok(())
+        }
+        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+    }
+}

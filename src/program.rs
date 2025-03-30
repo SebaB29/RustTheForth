@@ -8,13 +8,11 @@ use std::env;
 
 const DEFAULT_STACK_SIZE: usize = 128 * 1024;
 
-pub fn execute_program(stack_size: usize, filename: String) {
+pub fn execute_program(stack_size: usize, filename: String) -> Result<(), String> {
     let mut stack = Stack::new(stack_size);
     match read_file(filename) {
-        Ok(content) => {
-            execute_operation(&mut stack, content);
-        }
-        Err(error_msg) => println!("{}", error_msg),
+        Ok(content) => execute_operation(&mut stack, content),
+        Err(error_msg) => Err(error_msg),
     }
 }
 
@@ -43,22 +41,29 @@ fn parse_stack_size(args: &[String]) -> usize {
     DEFAULT_STACK_SIZE
 }
 
-fn execute_operation(stack: &mut Stack, input: String) {
+fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String> {
     for token in input.split_whitespace() {
-        match token {
-            "+" | "-" | "*" | "/" => apply_arithmetic_operation(stack, token),
-            "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, token),
-            "dup" | "drop" | "swap" | "over" | "rot" => apply_forth_operation(stack, token),
-            "CR" | "." => apply_output_operation(stack, token),
-            _ => default_operation(stack, token),
+        let token_upc = token.to_uppercase();
+        let result = match token_upc.as_str() {
+            "+" | "-" | "*" | "/" => apply_arithmetic_operation(stack, &token_upc),
+            "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, &token_upc),
+            "DUP" | "DROP" | "SWAP" | "OVER"  => apply_forth_operation(stack, &token_upc),
+            "CR" | "." => apply_output_operation(stack, &token_upc),
+            _ => default_operation(stack, &token_upc),
+        };
+
+        if let Err(error_msg) = result {
+            return Err(error_msg);
         }
     }
+
+    Ok(())
 }
 
-fn default_operation(stack: &mut Stack, token: &str) {
+fn default_operation(stack: &mut Stack, token: &str) -> Result<(), String> {
     if let Ok(number) = token.parse::<i16>() {
-        stack.push(number);
+        Ok(stack.push(number))
     } else {
-        println!("Error: Token no reconocido '{}'", token);
+        Err(format!("Error: Token no reconocido '{}'", token))
     }
 }

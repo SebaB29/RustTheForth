@@ -3,7 +3,7 @@ use crate::stack::Stack;
 const FALSE: i16 = 0;
 const TRUE: i16 = -1;
 
-pub fn apply_boolean_operation(stack: &mut Stack, operator: &str) {
+pub fn apply_boolean_operation(stack: &mut Stack, operator: &str) -> Result<(), String> {
     match operator {
         "=" => equal(stack),
         "<" => lower_than(stack),
@@ -11,79 +11,56 @@ pub fn apply_boolean_operation(stack: &mut Stack, operator: &str) {
         "AND" => and(stack),
         "OR" => or(stack),
         "NOT" => not(stack),
-        _ => {}
+        _ => Err("Error: Operador booleano no reconocido".to_string()),
     }
 }
 
-fn equal(stack: &mut Stack) {
-    if stack.len() < 2 {
-        println!("No hay suficientes elementos en la Pila.");
-        return;
+fn equal(stack: &mut Stack) -> Result<(), String> {
+    match (stack.pop(), stack.pop()) {
+        (Some(a), Some(b)) => Ok(stack.push(if a == b { TRUE } else { FALSE })),
+        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
     }
-
-    let value_1 = stack.pop();
-    let value_2 = stack.pop();
-    stack.push(if value_2 == value_1 { TRUE } else { FALSE });
 }
 
-fn lower_than(stack: &mut Stack) {
-    if stack.len() < 2 {
-        println!("No hay suficientes elementos en la Pila.");
-        return;
+fn lower_than(stack: &mut Stack) -> Result<(), String> {
+    match (stack.pop(), stack.pop()) {
+        (Some(a), Some(b)) => Ok(stack.push(if b < a { TRUE } else { FALSE })),
+        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
     }
-
-    let value_1 = stack.pop();
-    let value_2 = stack.pop();
-    stack.push(if value_2 < value_1 { TRUE } else { FALSE });
 }
 
-fn greater_than(stack: &mut Stack) {
-    if stack.len() < 2 {
-        println!("No hay suficientes elementos en la Pila.");
-        return;
+fn greater_than(stack: &mut Stack) -> Result<(), String> {
+    match (stack.pop(), stack.pop()) {
+        (Some(a), Some(b)) => Ok(stack.push(if b > a { TRUE } else { FALSE })),
+        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
     }
-
-    let value_1 = stack.pop();
-    let value_2 = stack.pop();
-    stack.push(if value_2 > value_1 { TRUE } else { FALSE });
 }
 
-fn and(stack: &mut Stack) {
-    if stack.len() < 2 {
-        println!("No hay suficientes elementos en la Pila.");
-        return;
+fn and(stack: &mut Stack) -> Result<(), String> {
+    match (stack.pop(), stack.pop()) {
+        (Some(a), Some(b)) => Ok(stack.push(if a != FALSE && b != FALSE {
+            TRUE
+        } else {
+            FALSE
+        })),
+        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
     }
-
-    let value_1 = stack.pop();
-    let value_2 = stack.pop();
-    stack.push(if (value_2 != Some(FALSE)) && (value_1 != Some(FALSE)) {
-        TRUE
-    } else {
-        FALSE
-    });
 }
 
-fn or(stack: &mut Stack) {
-    if stack.len() < 2 {
-        println!("No hay suficientes elementos en la Pila.");
-        return;
+fn or(stack: &mut Stack) -> Result<(), String> {
+    match (stack.pop(), stack.pop()) {
+        (Some(a), Some(b)) => Ok(stack.push(if a != FALSE || b != FALSE {
+            TRUE
+        } else {
+            FALSE
+        })),
+        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
     }
-
-    let value_1 = stack.pop();
-    let value_2 = stack.pop();
-    stack.push(if (value_2 != Some(FALSE)) || (value_1 != Some(FALSE)) {
-        TRUE
-    } else {
-        FALSE
-    });
 }
 
-fn not(stack: &mut Stack) {
-    if stack.len() == 0 {
-        println!("No hay suficientes elementos en la Pila.");
-        return;
+fn not(stack: &mut Stack) -> Result<(), String> {
+    match stack.pop() {
+        Some(a) => Ok(stack.push(if a != FALSE { FALSE } else { TRUE })),
+        None => Err("Error: No hay suficientes elementos en la pila".to_string()),
     }
-
-    let value = stack.pop();
-    stack.push(if value != Some(FALSE) { FALSE } else { TRUE });
 }

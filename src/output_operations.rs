@@ -1,15 +1,16 @@
 use crate::stack::Stack;
 
-pub fn apply_output_operation(stack: &mut Stack, operator: &str) {
+pub fn apply_output_operation(stack: &mut Stack, operator: &str) -> Result<(), String> {
     match operator {
-        "CR" => println!(),
+        "CR" => Ok(println!()),
         "." => point(stack),
-        _ => {}
+        _ => Err("Error: Operación de salida no reconocida".to_string()),
     }
 }
 
-fn point(stack: &mut Stack) {
-    if let Some(value) = stack.pop() {
-        println!("{}", value);
+fn point(stack: &mut Stack) -> Result<(), String> {
+    match stack.pop() {
+        Some(value) => Ok(println!("{}", value)),
+        _ => Err("Error: No hay elementos en la pila para imprimir".to_string()),
     }
 }
