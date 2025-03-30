@@ -1,5 +1,14 @@
 use crate::stack::Stack;
 
+/// Aplica una operación condicional en la pila según el operador recibido.
+/// 
+/// # Parámetros
+/// - `stack`: Referencia mutable a la pila de datos.
+/// - `operator`: Operador condicional en formato string.
+/// - `tokens`: Iterador de los tokens restantes en la ejecución.
+/// 
+/// # Errores
+/// Retorna un error si el operador no es reconocido.
 pub fn apply_conditional_operation(
     stack: &mut Stack,
     operator: &str,
@@ -14,6 +23,15 @@ pub fn apply_conditional_operation(
     }
 }
 
+/// Maneja la ejecución de la estructura condicional `IF ... THEN`.
+/// 
+/// # Parámetros
+/// - `stack`: Referencia mutable a la pila de datos.
+/// - `tokens`: Iterador de los tokens restantes en la ejecución.
+/// 
+/// # Errores
+/// - Retorna un error si la pila está vacía antes de evaluar `IF`.
+/// - Retorna un error si no se encuentra el token `THEN`.
 fn handle_if(stack: &mut Stack, tokens: &mut std::str::SplitWhitespace) -> Result<(), String> {
     let condition = stack
         .pop()

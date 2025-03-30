@@ -1,5 +1,15 @@
 use crate::stack::Stack;
 
+/// Aplica una operación Forth sobre la pila.
+/// 
+/// # Argumentos
+/// 
+/// * `stack` - La pila sobre la cual se realiza la operación.
+/// * `operator` - El operador Forth que se va a ejecutar (DUP, DROP, SWAP, OVER, ROT).
+/// 
+/// # Errores
+/// 
+/// Retorna un `Err(String)` si no fue posible realizar la operación.
 pub fn apply_forth_operation(stack: &mut Stack, operator: &str) -> Result<(), String> {
     match operator {
         "DUP" => dup(stack),
@@ -11,6 +21,15 @@ pub fn apply_forth_operation(stack: &mut Stack, operator: &str) -> Result<(), St
     }
 }
 
+/// Duplica el elemento en la parte superior de la pila.
+/// 
+/// # Argumentos
+/// 
+/// * `stack` - La pila sobre la cual se realiza la operación.
+/// 
+/// # Errores
+/// 
+/// Retorna un `Err(String)` si no hay suficientes elementos en la pila.
 fn dup(stack: &mut Stack) -> Result<(), String> {
     match stack.pop() {
         Some(value) => {
@@ -22,6 +41,15 @@ fn dup(stack: &mut Stack) -> Result<(), String> {
     }
 }
 
+/// Elimina el elemento en la parte superior de la pila.
+/// 
+/// # Argumentos
+/// 
+/// * `stack` - La pila sobre la cual se realiza la operación.
+/// 
+/// # Errores
+/// 
+/// Retorna un `Err(String)` si la pila esta vacía.
 fn drop(stack: &mut Stack) -> Result<(), String> {
     if stack.pop().is_none() {
         Err("Error: La pila está vacía.".to_string())
@@ -30,6 +58,15 @@ fn drop(stack: &mut Stack) -> Result<(), String> {
     }
 }
 
+/// Intercambia los dos elementos superiores de la pila.
+/// 
+/// # Argumentos
+/// 
+/// * `stack` - La pila sobre la cual se realiza la operación.
+/// 
+/// # Errores
+/// 
+/// Retorna un `Err(String)` si no hay suficientes elementos en la pila.
 fn swap(stack: &mut Stack) -> Result<(), String> {
     match (stack.pop(), stack.pop()) {
         (Some(a), Some(b)) => {
@@ -41,6 +78,15 @@ fn swap(stack: &mut Stack) -> Result<(), String> {
     }
 }
 
+/// Duplica el segundo elemento más cercano a la parte superior de la pila y lo coloca en la parte superior.
+/// 
+/// # Argumentos
+/// 
+/// * `stack` - La pila sobre la cual se realiza la operación.
+///
+/// # Errores
+/// 
+/// Retorna un `Err(String)` si no hay suficientes elementos en la pila.
 fn over(stack: &mut Stack) -> Result<(), String> {
     match (stack.pop(), stack.pop()) {
         (Some(a), Some(b)) => {
@@ -53,6 +99,15 @@ fn over(stack: &mut Stack) -> Result<(), String> {
     }
 }
 
+/// Rota cíclicamente los elementos de la pila, moviendo el elemento en la base de la pila a la cima.
+/// 
+/// # Argumentos
+/// 
+/// * `stack` - La pila sobre la cual se realiza la operación.
+///
+/// # Errores
+/// 
+/// Retorna un `Err(String)` si no hay suficientes elementos en la pila.
 fn rot(stack: &mut Stack) -> Result<(), String> {
     if stack.len() < 2 {
         return Err("Error: No hay suficientes elementos en la pila".to_string());
