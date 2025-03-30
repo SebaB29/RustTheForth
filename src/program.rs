@@ -1,5 +1,6 @@
 use crate::arithmetic_operations::apply_arithmetic_operation;
 use crate::boolean_operations::apply_boolean_operation;
+use crate::conditional_operations::apply_conditional_operation;
 use crate::file_handling::{read_file, save_stack_to_file};
 use crate::forth_basic_operations::apply_forth_operation;
 use crate::output_operations::apply_output_operation;
@@ -19,7 +20,7 @@ pub fn execute_program(stack_size: usize, filename: String) -> Result<(), String
             if let Err(e) = save_stack_to_file(&mut stack, "stack.fth") {
                 return Err(format!("Error al guardar la pila en el archivo: {}", e));
             }
-        },
+        }
         Err(error_msg) => return Err(error_msg),
     }
 
@@ -51,14 +52,17 @@ fn parse_stack_size(args: &[String]) -> usize {
     DEFAULT_STACK_SIZE
 }
 
-fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String> {
-    for token in input.split_whitespace() {
+pub fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String> {
+    let mut tokens = input.split_whitespace();
+
+    while let Some(token) = tokens.next() {
         let token_upc = token.to_uppercase();
         let result = match token_upc.as_str() {
             "+" | "-" | "*" | "/" => apply_arithmetic_operation(stack, &token_upc),
             "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, &token_upc),
             "DUP" | "DROP" | "SWAP" | "OVER" => apply_forth_operation(stack, &token_upc),
             "CR" | "." => apply_output_operation(stack, &token_upc),
+            "IF" | "THEN" => apply_conditional_operation(stack, &token_upc, &mut tokens),
             _ => default_operation(stack, &token_upc),
         };
 

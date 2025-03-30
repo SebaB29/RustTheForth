@@ -10,7 +10,7 @@ pub fn apply_output_operation(stack: &mut Stack, operator: &str) -> Result<(), S
 
 fn point(stack: &mut Stack) -> Result<(), String> {
     match stack.pop() {
-        Some(value) => Ok(println!("{}", value)),
+        Some(value) => Ok(print!("{} ", value)),
         _ => Err("Error: No hay elementos en la pila para imprimir".to_string()),
     }
 }
