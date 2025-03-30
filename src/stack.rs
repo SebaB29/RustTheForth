@@ -1,5 +1,5 @@
 /// Estructura que representa una pila de enteros de 16 bits (i16).
-/// 
+///
 /// La pila tiene un tamaño máximo en elementos determinado por el tamaño de memoria especificado
 /// al momento de la creación.
 pub struct Stack {

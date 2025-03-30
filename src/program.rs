@@ -10,23 +10,20 @@ use std::env;
 const DEFAULT_STACK_SIZE: usize = 128 * 1024;
 
 /// Ejecuta el programa especificado en el archivo.
-/// 
+///
 /// # Argumentos
-/// 
+///
 /// * `stack_size` - Tamaño de la pila.
 /// * `filename` - Nombre del archivo que contiene el programa Forth a ejecutar.
-/// 
+///
 /// # Retornos
-/// 
+///
 /// Devuelve `Ok(())` si el programa se ejecutó correctamente, o un `Err` con un mensaje de error en caso contrario.
 pub fn execute_program(stack_size: usize, filename: String) -> Result<(), String> {
     let mut stack = Stack::new(stack_size);
     match read_file(filename) {
         Ok(content) => {
-            if let Err(error_msg) = execute_operation(&mut stack, content) {
-                return Err(error_msg);
-            }
-
+            execute_operation(&mut stack, content)?;
             if let Err(e) = save_stack_to_file(&mut stack, "stack.fth") {
                 return Err(format!("Error al guardar la pila en el archivo: {}", e));
             }
@@ -38,10 +35,10 @@ pub fn execute_program(stack_size: usize, filename: String) -> Result<(), String
 }
 
 /// Analiza los argumentos de la línea de comandos.
-/// 
+///
 /// # Retornos
-/// 
-/// Devuelve un `Result` que contiene el nombre del archivo y el tamaño de la pila si la entrada es válida, 
+///
+/// Devuelve un `Result` que contiene el nombre del archivo y el tamaño de la pila si la entrada es válida,
 /// o un mensaje de error si los argumentos no son adecuados.
 pub fn parse_args() -> Result<(String, usize), String> {
     let args: Vec<String> = env::args().collect();
@@ -55,14 +52,14 @@ pub fn parse_args() -> Result<(String, usize), String> {
 }
 
 /// Ejecuta las operaciones definidas.
-/// 
+///
 /// # Argumentos
-/// 
+///
 /// * `stack` - La pila sobre la cual se ejecutan las operaciones.
 /// * `input` - El String con las operaciones a ejecutar.
-/// 
+///
 /// # Retornos
-/// 
+///
 /// Devuelve `Ok(())` si las operaciones se ejecutan correctamente, o un `Err` con el mensaje de error correspondiente.
 pub fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String> {
     let mut tokens = input.split_whitespace();
@@ -78,22 +75,20 @@ pub fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String>
             _ => default_operation(stack, &token_upc),
         };
 
-        if let Err(error_msg) = result {
-            return Err(error_msg);
-        }
+        result?
     }
 
     Ok(())
 }
 
 /// Analiza el tamaño de la pila a partir de los argumentos de la línea de comandos.
-/// 
+///
 /// # Argumentos
-/// 
+///
 /// * `args` - Los argumentos de la línea de comandos.
-/// 
+///
 /// # Retornos
-/// 
+///
 /// Devuelve el tamaño de la pila o un valor por defecto si no se encuentra en los argumentos.
 fn parse_stack_size(args: &[String]) -> usize {
     for arg in args {
@@ -110,18 +105,19 @@ fn parse_stack_size(args: &[String]) -> usize {
 }
 
 /// Realiza la operación por defecto cuando el token no es reconocido como un operador.
-/// 
+///
 /// # Argumentos
-/// 
+///
 /// * `stack` - La pila sobre la cual se ejecuta la operación.
 /// * `token` - El token que representa un número a agregar a la pila.
-/// 
+///
 /// # Retornos
-/// 
+///
 /// Devuelve `Ok(())` si el número se agrega correctamente a la pila, o un `Err` si el token no es un número válido.
 fn default_operation(stack: &mut Stack, token: &str) -> Result<(), String> {
     if let Ok(number) = token.parse::<i16>() {
-        Ok(stack.push(number))
+        stack.push(number);
+        Ok(())
     } else {
         Err(format!("Error: Token no reconocido '{}'", token))
     }

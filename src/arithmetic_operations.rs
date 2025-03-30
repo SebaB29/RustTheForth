@@ -30,7 +30,8 @@ pub fn apply_arithmetic_operation(stack: &mut Stack, operator: &str) -> Result<(
 /// Retorna un `Err(String)` si no hay suficientes elementos en la pila.
 fn sum(stack: &mut Stack) -> Result<(), String> {
     if let (Some(a), Some(b)) = (stack.pop(), stack.pop()) {
-        Ok(stack.push(b + a))
+        stack.push(b + a);
+        Ok(())
     } else {
         Err("Error: No hay suficientes elementos en la pila".to_string())
     }
@@ -42,7 +43,8 @@ fn sum(stack: &mut Stack) -> Result<(), String> {
 /// Retorna un `Err(String)` si no hay suficientes elementos en la pila.
 fn subtraction(stack: &mut Stack) -> Result<(), String> {
     if let (Some(a), Some(b)) = (stack.pop(), stack.pop()) {
-        Ok(stack.push(b - a))
+        stack.push(b - a);
+        Ok(())
     } else {
         Err("Error: No hay suficientes elementos en la pila".to_string())
     }
@@ -54,7 +56,8 @@ fn subtraction(stack: &mut Stack) -> Result<(), String> {
 /// Retorna un `Err(String)` si no hay suficientes elementos en la pila.
 fn multiplication(stack: &mut Stack) -> Result<(), String> {
     if let (Some(a), Some(b)) = (stack.pop(), stack.pop()) {
-        Ok(stack.push(b * a))
+        stack.push(b * a);
+        Ok(())
     } else {
         Err("Error: No hay suficientes elementos en la pila".to_string())
     }
@@ -67,7 +70,10 @@ fn multiplication(stack: &mut Stack) -> Result<(), String> {
 fn division(stack: &mut Stack) -> Result<(), String> {
     match (stack.pop(), stack.pop()) {
         (Some(0), Some(_)) => Err("Error: División por cero".to_string()),
-        (Some(a), Some(b)) => Ok(stack.push(b / a)),
+        (Some(a), Some(b)) => {
+            stack.push(b / a);
+            Ok(())
+        }
         _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
     }
 }
