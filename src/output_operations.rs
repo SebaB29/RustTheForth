@@ -78,7 +78,7 @@ fn print_string(tokens: &mut std::str::SplitWhitespace) -> Result<(), String> {
     let mut collected: Vec<&str> = Vec::new();
     let mut found_closing_quote = false;
 
-    while let Some(token) = tokens.next() {
+    for token in tokens.by_ref() {
         if token.ends_with('"') {
             let trimmed = token.trim_end_matches('"');
             collected.push(trimmed);
