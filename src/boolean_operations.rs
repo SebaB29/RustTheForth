@@ -27,7 +27,7 @@ pub fn apply_boolean_operation(stack: &mut Stack, operator: &str) -> Result<(), 
         "AND" => and(stack),
         "OR" => or(stack),
         "NOT" => not(stack),
-        _ => Err("Error: Operador booleano no reconocido".to_string()),
+        _ => Err("?".to_string()),
     }
 }
 
@@ -41,7 +41,7 @@ fn equal(stack: &mut Stack) -> Result<(), String> {
             stack.push(if a == b { TRUE } else { FALSE });
             Ok(())
         }
-        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        _ => Err("stack-underflow".to_string()),
     }
 }
 
@@ -55,7 +55,7 @@ fn lower_than(stack: &mut Stack) -> Result<(), String> {
             stack.push(if b < a { TRUE } else { FALSE });
             Ok(())
         }
-        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        _ => Err("stack-underflow".to_string()),
     }
 }
 
@@ -69,7 +69,7 @@ fn greater_than(stack: &mut Stack) -> Result<(), String> {
             stack.push(if b > a { TRUE } else { FALSE });
             Ok(())
         }
-        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        _ => Err("stack-underflow".to_string()),
     }
 }
 
@@ -87,7 +87,7 @@ fn and(stack: &mut Stack) -> Result<(), String> {
             });
             Ok(())
         }
-        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        _ => Err("stack-underflow".to_string()),
     }
 }
 
@@ -105,7 +105,7 @@ fn or(stack: &mut Stack) -> Result<(), String> {
             });
             Ok(())
         }
-        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        _ => Err("stack-underflow".to_string()),
     }
 }
 
@@ -119,6 +119,6 @@ fn not(stack: &mut Stack) -> Result<(), String> {
             stack.push(if a != FALSE { FALSE } else { TRUE });
             Ok(())
         }
-        None => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        None => Err("stack-underflow".to_string()),
     }
 }

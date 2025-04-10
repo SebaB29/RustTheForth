@@ -70,7 +70,7 @@ pub fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String>
             "+" | "-" | "*" | "/" => apply_arithmetic_operation(stack, &token_upc),
             "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, &token_upc),
             "DUP" | "DROP" | "SWAP" | "OVER" | "ROT" => apply_forth_operation(stack, &token_upc),
-            "CR" | "." => apply_output_operation(stack, &token_upc),
+            "CR" | "." | "EMIT"| ".\"" => apply_output_operation(stack, &token_upc, &mut tokens),
             "IF" | "THEN" => apply_conditional_operation(stack, &token_upc, &mut tokens),
             _ => default_operation(stack, &token_upc),
         };
@@ -119,6 +119,6 @@ fn default_operation(stack: &mut Stack, token: &str) -> Result<(), String> {
         stack.push(number);
         Ok(())
     } else {
-        Err(format!("Error: Token no reconocido '{}'", token))
+        Err("?".to_string())
     }
 }

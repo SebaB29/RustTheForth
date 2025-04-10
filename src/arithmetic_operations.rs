@@ -20,7 +20,7 @@ pub fn apply_arithmetic_operation(stack: &mut Stack, operator: &str) -> Result<(
         "-" => subtraction(stack),
         "*" => multiplication(stack),
         "/" => division(stack),
-        _ => Err("Error: Operador no reconocido".to_string()),
+        _ => Err("?".to_string()),
     }
 }
 
@@ -33,7 +33,7 @@ fn sum(stack: &mut Stack) -> Result<(), String> {
         stack.push(b + a);
         Ok(())
     } else {
-        Err("Error: No hay suficientes elementos en la pila".to_string())
+        Err("stack-underflow".to_string())
     }
 }
 
@@ -46,7 +46,7 @@ fn subtraction(stack: &mut Stack) -> Result<(), String> {
         stack.push(b - a);
         Ok(())
     } else {
-        Err("Error: No hay suficientes elementos en la pila".to_string())
+        Err("stack-underflow".to_string())
     }
 }
 
@@ -59,7 +59,7 @@ fn multiplication(stack: &mut Stack) -> Result<(), String> {
         stack.push(b * a);
         Ok(())
     } else {
-        Err("Error: No hay suficientes elementos en la pila".to_string())
+        Err("stack-underflow".to_string())
     }
 }
 
@@ -69,11 +69,11 @@ fn multiplication(stack: &mut Stack) -> Result<(), String> {
 /// Retorna un `Err(String)` si el divisor es cero o si no hay suficientes elementos en la pila.
 fn division(stack: &mut Stack) -> Result<(), String> {
     match (stack.pop(), stack.pop()) {
-        (Some(0), Some(_)) => Err("Error: División por cero".to_string()),
+        (Some(0), Some(_)) => Err("division-by-zero".to_string()),
         (Some(a), Some(b)) => {
             stack.push(b / a);
             Ok(())
         }
-        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        _ => Err("stack-underflow".to_string()),
     }
 }

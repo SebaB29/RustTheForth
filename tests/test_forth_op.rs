@@ -84,10 +84,15 @@ mod forth_operations_test {
         let mut stack = setup_stack();
 
         let result = apply_forth_operation(&mut stack, "DUP");
-        assert_eq!(
-            result,
-            Err("Error: No hay suficientes elementos en la pila".to_string())
-        );
+        assert_eq!(result, Err("stack-underflow".to_string()));
+    }
+
+    #[test]
+    fn test_drop_not_enough_elements() {
+        let mut stack = setup_stack();
+
+        let result = apply_forth_operation(&mut stack, "DROP");
+        assert_eq!(result, Err("stack-underflow".to_string()));
     }
 
     #[test]
@@ -97,20 +102,22 @@ mod forth_operations_test {
         stack.push(1);
 
         let result = apply_forth_operation(&mut stack, "SWAP");
-        assert_eq!(
-            result,
-            Err("Error: No hay suficientes elementos en la pila".to_string())
-        );
+        assert_eq!(result, Err("stack-underflow".to_string()));
     }
 
     #[test]
-    fn test_invalid_forth_operator() {
+    fn test_over_not_enough_elements() {
         let mut stack = setup_stack();
 
-        let result = apply_forth_operation(&mut stack, "invalid_operator");
-        assert_eq!(
-            result,
-            Err("Error: Operación Forth no reconocida".to_string())
-        );
+        let result = apply_forth_operation(&mut stack, "OVER");
+        assert_eq!(result, Err("stack-underflow".to_string()));
+    }
+
+    #[test]
+    fn test_rot_not_enough_elements() {
+        let mut stack = setup_stack();
+
+        let result = apply_forth_operation(&mut stack, "ROT");
+        assert_eq!(result, Err("stack-underflow".to_string()));
     }
 }

@@ -16,10 +16,7 @@ pub fn apply_conditional_operation(
 ) -> Result<(), String> {
     match operator {
         "IF" => handle_if(stack, tokens),
-        _ => Err(format!(
-            "Error: Operador condicional no reconocido '{}'",
-            operator
-        )),
+        _ => Err("?".to_string()),
     }
 }
 
@@ -35,7 +32,7 @@ pub fn apply_conditional_operation(
 fn handle_if(stack: &mut Stack, tokens: &mut std::str::SplitWhitespace) -> Result<(), String> {
     let condition = stack
         .pop()
-        .ok_or("Error: La pila está vacía antes de 'IF'")?;
+        .ok_or("stack-underflow")?;
 
     if condition != 0 {
         for token in tokens.by_ref() {

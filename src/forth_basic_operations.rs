@@ -17,7 +17,7 @@ pub fn apply_forth_operation(stack: &mut Stack, operator: &str) -> Result<(), St
         "SWAP" => swap(stack),
         "OVER" => over(stack),
         "ROT" => rot(stack),
-        _ => Err("Error: Operación Forth no reconocida".to_string()),
+        _ => Err("?".to_string()),
     }
 }
 
@@ -37,7 +37,7 @@ fn dup(stack: &mut Stack) -> Result<(), String> {
             stack.push(value);
             Ok(())
         }
-        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        _ => Err("stack-underflow".to_string()),
     }
 }
 
@@ -52,7 +52,7 @@ fn dup(stack: &mut Stack) -> Result<(), String> {
 /// Retorna un `Err(String)` si la pila esta vacía.
 fn drop(stack: &mut Stack) -> Result<(), String> {
     if stack.pop().is_none() {
-        Err("Error: La pila está vacía.".to_string())
+        Err("stack-underflow".to_string())
     } else {
         Ok(())
     }
@@ -74,7 +74,7 @@ fn swap(stack: &mut Stack) -> Result<(), String> {
             stack.push(b);
             Ok(())
         }
-        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        _ => Err("stack-underflow".to_string()),
     }
 }
 
@@ -95,7 +95,7 @@ fn over(stack: &mut Stack) -> Result<(), String> {
             stack.push(b);
             Ok(())
         }
-        _ => Err("Error: No hay suficientes elementos en la pila".to_string()),
+        _ => Err("stack-underflow".to_string()),
     }
 }
 
@@ -110,7 +110,7 @@ fn over(stack: &mut Stack) -> Result<(), String> {
 /// Retorna un `Err(String)` si no hay suficientes elementos en la pila.
 fn rot(stack: &mut Stack) -> Result<(), String> {
     if stack.len() < 2 {
-        return Err("Error: No hay suficientes elementos en la pila".to_string());
+        return Err("stack-underflow".to_string());
     }
 
     let mut temp_stack = Vec::new();

@@ -65,7 +65,7 @@ mod arithmetic_operations_test {
         stack.push(0);
 
         let result = apply_arithmetic_operation(&mut stack, "/");
-        assert_eq!(result, Err("Error: División por cero".to_string()));
+        assert_eq!(result, Err("division-by-zero".to_string()));
     }
 
     #[test]
@@ -75,17 +75,36 @@ mod arithmetic_operations_test {
         stack.push(2);
 
         let result = apply_arithmetic_operation(&mut stack, "+");
-        assert_eq!(
-            result,
-            Err("Error: No hay suficientes elementos en la pila".to_string())
-        );
+        assert_eq!(result, Err("stack-underflow".to_string()));
     }
 
     #[test]
-    fn test_invalid_operator() {
+    fn test_not_enough_elements_for_subtraction() {
         let mut stack = setup_stack();
 
-        let result = apply_arithmetic_operation(&mut stack, "invalid_operator");
-        assert_eq!(result, Err("Error: Operador no reconocido".to_string()));
+        stack.push(2);
+
+        let result = apply_arithmetic_operation(&mut stack, "-");
+        assert_eq!(result, Err("stack-underflow".to_string()));
+    }
+
+    #[test]
+    fn test_not_enough_elements_for_multiplication() {
+        let mut stack = setup_stack();
+
+        stack.push(2);
+
+        let result = apply_arithmetic_operation(&mut stack, "*");
+        assert_eq!(result, Err("stack-underflow".to_string()));
+    }
+
+    #[test]
+    fn test_not_enough_elements_for_division() {
+        let mut stack = setup_stack();
+
+        stack.push(2);
+
+        let result = apply_arithmetic_operation(&mut stack, "/");
+        assert_eq!(result, Err("stack-underflow".to_string()));
     }
 }
