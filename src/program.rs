@@ -21,17 +21,16 @@ const DEFAULT_STACK_SIZE: usize = 128 * 1024;
 /// Devuelve `Ok(())` si el programa se ejecutó correctamente, o un `Err` con un mensaje de error en caso contrario.
 pub fn execute_program(stack_size: usize, filename: String) -> Result<(), String> {
     let mut stack = Stack::new(stack_size);
-    match read_file(filename) {
-        Ok(content) => {
-            execute_operation(&mut stack, content)?;
-            if let Err(e) = save_stack_to_file(&mut stack, "stack.fth") {
-                return Err(format!("Error al guardar la pila en el archivo: {}", e));
-            }
-        }
-        Err(error_msg) => return Err(error_msg),
+    let result = match read_file(filename) {
+        Ok(content) => execute_operation(&mut stack, content),
+        Err(error_msg) => Err(error_msg),
+    };
+
+    if let Err(e) = save_stack_to_file(&mut stack, "stack.fth") {
+        return Err(format!("Error al guardar la pila en el archivo: {}", e));
     }
 
-    Ok(())
+    result
 }
 
 /// Analiza los argumentos de la línea de comandos.
