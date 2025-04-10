@@ -10,7 +10,11 @@ use crate::stack::Stack;
 /// # Errores
 ///
 /// Retorna un `Err(String)` si el operador no es reconocido.
-pub fn apply_output_operation(stack: &mut Stack, operator: &str, tokens: &mut std::str::SplitWhitespace) -> Result<(), String> {
+pub fn apply_output_operation(
+    stack: &mut Stack,
+    operator: &str,
+    tokens: &mut std::str::SplitWhitespace,
+) -> Result<(), String> {
     match operator {
         "CR" => {
             println!();

@@ -30,9 +30,7 @@ pub fn apply_conditional_operation(
 /// - Retorna un error si la pila está vacía antes de evaluar `IF`.
 /// - Retorna un error si no se encuentra el token `THEN`.
 fn handle_if(stack: &mut Stack, tokens: &mut std::str::SplitWhitespace) -> Result<(), String> {
-    let condition = stack
-        .pop()
-        .ok_or("stack-underflow")?;
+    let condition = stack.pop().ok_or("stack-underflow")?;
 
     if condition != 0 {
         for token in tokens.by_ref() {
