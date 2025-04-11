@@ -5,7 +5,7 @@ use crate::file_handling::{read_file, save_stack_to_file};
 use crate::forth_basic_operations::apply_forth_operation;
 use crate::output_operations::apply_output_operation;
 use crate::stack::Stack;
-use crate::word_definitions::{handle_word_definition, WordMap};
+use crate::word_definitions::{WordMap, handle_word_definition};
 use std::env;
 
 const DEFAULT_STACK_SIZE: usize = 128 * 1024;
@@ -28,7 +28,7 @@ pub fn execute_program(stack_size: usize, filename: String) -> Result<(), String
         Err(error_msg) => Err(error_msg),
     };
 
-    if let Err(e) = save_stack_to_file(&mut stack, "stack.fth") {
+    if let Err(e) = save_stack_to_file(&mut stack) {
         return Err(format!("Error al guardar la pila en el archivo: {}", e));
     }
 
@@ -62,7 +62,11 @@ pub fn parse_args() -> Result<(String, usize), String> {
 /// # Retornos
 ///
 /// Devuelve `Ok(())` si las operaciones se ejecutan correctamente, o un `Err` con el mensaje de error correspondiente.
-pub fn execute_operation(stack: &mut Stack, input: String, word_map: &mut WordMap) -> Result<(), String> {
+pub fn execute_operation(
+    stack: &mut Stack,
+    input: String,
+    word_map: &mut WordMap,
+) -> Result<(), String> {
     let mut tokens = input.split_whitespace();
 
     while let Some(token) = tokens.next() {
@@ -85,7 +89,7 @@ pub fn execute_operation(stack: &mut Stack, input: String, word_map: &mut WordMa
             "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, &token_upc),
             "DUP" | "DROP" | "SWAP" | "OVER" | "ROT" => apply_forth_operation(stack, &token_upc),
             "CR" | "." | "EMIT" | ".\"" => apply_output_operation(stack, &token_upc, &mut tokens),
-            "IF" | "THEN" => apply_conditional_operation(stack, &token_upc, &mut tokens, word_map),
+            "IF" => apply_conditional_operation(stack, &token_upc, &mut tokens, word_map),
             _ => default_operation(stack, &token_upc),
         };
 
