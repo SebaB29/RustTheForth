@@ -36,7 +36,7 @@ impl Stack {
         if self.len() < self.max_size {
             self.elements.push(value);
         } else {
-            println!("La pila esta llena.");
+            println!("stack-overflow");
         }
     }
 

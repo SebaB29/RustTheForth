@@ -6,6 +6,7 @@ mod forth_basic_operations;
 mod output_operations;
 mod program;
 mod stack;
+mod word_definitions;
 
 fn main() {
     match program::parse_args() {

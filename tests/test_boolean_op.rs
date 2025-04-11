@@ -10,7 +10,7 @@ mod boolean_operations_test {
     }
 
     #[test]
-    fn test_equal() {
+    fn test_equal_is_true() {
         let mut stack = setup_stack();
 
         stack.push(5);
@@ -22,7 +22,19 @@ mod boolean_operations_test {
     }
 
     #[test]
-    fn test_lower_than() {
+    fn test_equal_is_false() {
+        let mut stack = setup_stack();
+
+        stack.push(4);
+        stack.push(5);
+
+        let result = apply_boolean_operation(&mut stack, "=");
+        assert_eq!(result, Ok(()));
+        assert_eq!(stack.pop(), Some(0));
+    }
+
+    #[test]
+    fn test_lower_than_is_true() {
         let mut stack = setup_stack();
 
         stack.push(3);
@@ -34,7 +46,19 @@ mod boolean_operations_test {
     }
 
     #[test]
-    fn test_greater_than() {
+    fn test_lower_than_is_false() {
+        let mut stack = setup_stack();
+
+        stack.push(3);
+        stack.push(2);
+
+        let result = apply_boolean_operation(&mut stack, "<");
+        assert_eq!(result, Ok(()));
+        assert_eq!(stack.pop(), Some(0));
+    }
+
+    #[test]
+    fn test_greater_than_is_true() {
         let mut stack = setup_stack();
 
         stack.push(5);
@@ -46,7 +70,19 @@ mod boolean_operations_test {
     }
 
     #[test]
-    fn test_and() {
+    fn test_greater_than_is_false() {
+        let mut stack = setup_stack();
+
+        stack.push(2);
+        stack.push(3);
+
+        let result = apply_boolean_operation(&mut stack, ">");
+        assert_eq!(result, Ok(()));
+        assert_eq!(stack.pop(), Some(0));
+    }
+
+    #[test]
+    fn test_true_and_true_is_true() {
         let mut stack = setup_stack();
 
         stack.push(-1);
@@ -58,10 +94,34 @@ mod boolean_operations_test {
     }
 
     #[test]
-    fn test_or() {
+    fn test_true_and_false_is_false() {
         let mut stack = setup_stack();
 
+        stack.push(-1);
         stack.push(0);
+
+        let result = apply_boolean_operation(&mut stack, "AND");
+        assert_eq!(result, Ok(()));
+        assert_eq!(stack.pop(), Some(0));
+    }
+
+    #[test]
+    fn test_false_and_false_is_false() {
+        let mut stack = setup_stack();
+
+        stack.push(-1);
+        stack.push(0);
+
+        let result = apply_boolean_operation(&mut stack, "AND");
+        assert_eq!(result, Ok(()));
+        assert_eq!(stack.pop(), Some(0));
+    }
+
+    #[test]
+    fn test_true_or_true_is_true() {
+        let mut stack = setup_stack();
+
+        stack.push(-1);
         stack.push(-1);
 
         let result = apply_boolean_operation(&mut stack, "OR");
@@ -70,7 +130,42 @@ mod boolean_operations_test {
     }
 
     #[test]
-    fn test_not() {
+    fn test_true_or_false_is_true() {
+        let mut stack = setup_stack();
+
+        stack.push(-1);
+        stack.push(-1);
+
+        let result = apply_boolean_operation(&mut stack, "OR");
+        assert_eq!(result, Ok(()));
+        assert_eq!(stack.pop(), Some(-1));
+    }
+
+    #[test]
+    fn test_false_or_false_is_false() {
+        let mut stack = setup_stack();
+
+        stack.push(0);
+        stack.push(0);
+
+        let result = apply_boolean_operation(&mut stack, "OR");
+        assert_eq!(result, Ok(()));
+        assert_eq!(stack.pop(), Some(0));
+    }
+
+    #[test]
+    fn test_not_false_is_true() {
+        let mut stack = setup_stack();
+
+        stack.push(0);
+
+        let result = apply_boolean_operation(&mut stack, "NOT");
+        assert_eq!(result, Ok(()));
+        assert_eq!(stack.pop(), Some(-1));
+    }
+
+    #[test]
+    fn test_not_true_is_false() {
         let mut stack = setup_stack();
 
         stack.push(-1);
@@ -81,25 +176,27 @@ mod boolean_operations_test {
     }
 
     #[test]
-    fn test_not_false() {
-        let mut stack = setup_stack();
-
-        stack.push(0);
-
-        let result = apply_boolean_operation(&mut stack, "NOT");
-        assert_eq!(result, Ok(()));
-        assert_eq!(stack.pop(), Some(-1));
-    }
-
-    #[test]
     fn test_equal_not_enough_elements() {
         let mut stack = setup_stack();
 
         let result = apply_boolean_operation(&mut stack, "=");
-        assert_eq!(
-            result,
-            Err("Error: No hay suficientes elementos en la pila".to_string())
-        );
+        assert_eq!(result, Err("stack-underflow".to_string()));
+    }
+
+    #[test]
+    fn test_lower_than_not_enough_elements() {
+        let mut stack = setup_stack();
+
+        let result = apply_boolean_operation(&mut stack, "<");
+        assert_eq!(result, Err("stack-underflow".to_string()));
+    }
+
+    #[test]
+    fn test_greater_than_not_enough_elements() {
+        let mut stack = setup_stack();
+
+        let result = apply_boolean_operation(&mut stack, ">");
+        assert_eq!(result, Err("stack-underflow".to_string()));
     }
 
     #[test]
@@ -107,20 +204,31 @@ mod boolean_operations_test {
         let mut stack = setup_stack();
 
         let result = apply_boolean_operation(&mut stack, "AND");
-        assert_eq!(
-            result,
-            Err("Error: No hay suficientes elementos en la pila".to_string())
-        );
+        assert_eq!(result, Err("stack-underflow".to_string()));
     }
 
     #[test]
-    fn test_invalid_boolean_operator() {
+    fn test_or_not_enough_elements() {
         let mut stack = setup_stack();
 
-        let result = apply_boolean_operation(&mut stack, "INVALID_OP");
-        assert_eq!(
-            result,
-            Err("Error: Operador booleano no reconocido".to_string())
-        );
+        let result = apply_boolean_operation(&mut stack, "OR");
+        assert_eq!(result, Err("stack-underflow".to_string()));
+    }
+
+    #[test]
+    fn test_chained_boolean_operations() {
+        let mut stack = setup_stack();
+
+        stack.push(5);
+        stack.push(5);
+        assert_eq!(apply_boolean_operation(&mut stack, "="), Ok(()));
+
+        stack.push(3);
+        stack.push(2);
+        assert_eq!(apply_boolean_operation(&mut stack, ">"), Ok(()));
+
+        assert_eq!(apply_boolean_operation(&mut stack, "AND"), Ok(()));
+
+        assert_eq!(stack.pop(), Some(-1));
     }
 }
