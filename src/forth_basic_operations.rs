@@ -8,7 +8,7 @@ use crate::stack::Stack;
 /// - `SWAP`: Intercambia los dos elementos superiores de la pila.
 /// - `OVER`: Copia el penúltimo elemento y lo coloca en el tope.
 /// - `ROT`: Rota los elementos de la pila, colocando el elemento de la base en el tope.
-/// 
+///
 /// # Parámetros
 /// - `stack`: Referencia mutable a la pila de datos.
 /// - `operator`: Operador en formato string que representa la operación Forth a ejecutar.

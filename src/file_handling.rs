@@ -10,7 +10,7 @@ const FILE_TO_PERSIST_DATA: &str = "stack.fth";
 /// - `filename`: Nombre del archivo a leer.
 ///
 /// # Retorna
-/// 
+///
 /// - `Ok(String)` con el contenido del archivo si la lectura es exitosa, o
 /// - `Err(String)` con un mensaje de error si ocurre una falla.
 pub fn read_file(filename: String) -> Result<String, String> {

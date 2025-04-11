@@ -138,7 +138,11 @@ fn greater_than(stack: &mut Stack) -> Result<(), String> {
 /// - `Err(String)` con el mensaje `"stack-underflow"` si la pila no contiene suficientes elementos.
 fn and(stack: &mut Stack) -> Result<(), String> {
     let (a, b) = pop_two_operands(stack)?;
-    stack.push(if a != FALSE && b != FALSE { TRUE } else { FALSE });
+    stack.push(if a != FALSE && b != FALSE {
+        TRUE
+    } else {
+        FALSE
+    });
     Ok(())
 }
 
@@ -159,7 +163,11 @@ fn and(stack: &mut Stack) -> Result<(), String> {
 /// - `Err(String)` con el mensaje `"stack-underflow"` si la pila no contiene suficientes elementos.
 fn or(stack: &mut Stack) -> Result<(), String> {
     let (a, b) = pop_two_operands(stack)?;
-    stack.push(if a != FALSE || b != FALSE { TRUE } else { FALSE });
+    stack.push(if a != FALSE || b != FALSE {
+        TRUE
+    } else {
+        FALSE
+    });
     Ok(())
 }
 
