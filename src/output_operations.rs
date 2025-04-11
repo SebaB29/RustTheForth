@@ -58,7 +58,7 @@ fn point(stack: &mut Stack) -> Result<(), String> {
 fn emit(stack: &mut Stack) -> Result<(), String> {
     match stack.pop() {
         Some(value) => {
-            print!("{}", value as u8 as char);
+            print!("{} ", value as u8 as char);
             Ok(())
         }
         _ => Err("stack-underflow".to_string()),
@@ -94,6 +94,6 @@ fn print_string(tokens: &mut std::str::SplitWhitespace) -> Result<(), String> {
     }
 
     let result = collected.join(" ");
-    print!("{}", result);
+    print!("{} ", result);
     Ok(())
 }

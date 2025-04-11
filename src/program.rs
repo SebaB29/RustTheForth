@@ -73,7 +73,7 @@ pub fn execute_operation(
         let token_upc = token.to_uppercase();
         // Si es una definición de palabra
         if token_upc == ":" {
-            handle_word_definition(&token_upc, &mut tokens, word_map)?;
+            handle_word_definition(&mut tokens, word_map)?;
             continue;
         }
 
