@@ -1,4 +1,5 @@
 use crate::stack::Stack;
+use crate::word_definitions::WordMap;
 
 /// Aplica una operación condicional en la pila según el operador recibido.
 ///
@@ -13,9 +14,10 @@ pub fn apply_conditional_operation(
     stack: &mut Stack,
     operator: &str,
     tokens: &mut std::str::SplitWhitespace,
+    word_map: &mut WordMap,
 ) -> Result<(), String> {
     match operator {
-        "IF" => handle_if(stack, tokens),
+        "IF" => handle_if(stack, tokens, word_map),
         _ => Err("?".to_string()),
     }
 }
@@ -29,7 +31,7 @@ pub fn apply_conditional_operation(
 /// # Errores
 /// - Retorna un error si la pila está vacía antes de evaluar `IF`.
 /// - Retorna un error si no se encuentra el token `THEN`.
-fn handle_if(stack: &mut Stack, tokens: &mut std::str::SplitWhitespace) -> Result<(), String> {
+fn handle_if(stack: &mut Stack, tokens: &mut std::str::SplitWhitespace, word_map: &mut WordMap) -> Result<(), String> {
     let condition = stack.pop().ok_or("stack-underflow")?;
 
     if condition != 0 {
@@ -37,7 +39,7 @@ fn handle_if(stack: &mut Stack, tokens: &mut std::str::SplitWhitespace) -> Resul
             if token.to_uppercase() == "THEN" {
                 return Ok(());
             }
-            crate::program::execute_operation(stack, token.to_string())?;
+            crate::program::execute_operation(stack, token.to_string(), word_map)?;
         }
     } else {
         for token in tokens.by_ref() {

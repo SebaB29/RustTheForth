@@ -5,4 +5,5 @@ pub mod file_handling;
 pub mod forth_basic_operations;
 pub mod output_operations;
 pub mod program;
+mod word_definitions;
 pub mod stack;

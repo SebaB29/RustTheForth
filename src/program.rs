@@ -5,6 +5,7 @@ use crate::file_handling::{read_file, save_stack_to_file};
 use crate::forth_basic_operations::apply_forth_operation;
 use crate::output_operations::apply_output_operation;
 use crate::stack::Stack;
+use crate::word_definitions::{handle_word_definition, WordMap};
 use std::env;
 
 const DEFAULT_STACK_SIZE: usize = 128 * 1024;
@@ -21,8 +22,9 @@ const DEFAULT_STACK_SIZE: usize = 128 * 1024;
 /// Devuelve `Ok(())` si el programa se ejecutó correctamente, o un `Err` con un mensaje de error en caso contrario.
 pub fn execute_program(stack_size: usize, filename: String) -> Result<(), String> {
     let mut stack = Stack::new(stack_size);
+    let mut word_map = WordMap::new();
     let result = match read_file(filename) {
-        Ok(content) => execute_operation(&mut stack, content),
+        Ok(content) => execute_operation(&mut stack, content, &mut word_map),
         Err(error_msg) => Err(error_msg),
     };
 
@@ -60,17 +62,30 @@ pub fn parse_args() -> Result<(String, usize), String> {
 /// # Retornos
 ///
 /// Devuelve `Ok(())` si las operaciones se ejecutan correctamente, o un `Err` con el mensaje de error correspondiente.
-pub fn execute_operation(stack: &mut Stack, input: String) -> Result<(), String> {
+pub fn execute_operation(stack: &mut Stack, input: String, word_map: &mut WordMap) -> Result<(), String> {
     let mut tokens = input.split_whitespace();
 
     while let Some(token) = tokens.next() {
         let token_upc = token.to_uppercase();
+        // Si es una definición de palabra
+        if token_upc == ":" {
+            handle_word_definition(&token_upc, &mut tokens, word_map)?;
+            continue;
+        }
+
+        // Si es una palabra definida por el usuario
+        if let Some(definition) = word_map.get(&token_upc) {
+            let definition_str = definition.join(" ");
+            execute_operation(stack, definition_str, word_map)?;
+            continue;
+        }
+
         let result = match token_upc.as_str() {
             "+" | "-" | "*" | "/" => apply_arithmetic_operation(stack, &token_upc),
             "=" | "<" | ">" | "AND" | "OR" | "NOT" => apply_boolean_operation(stack, &token_upc),
             "DUP" | "DROP" | "SWAP" | "OVER" | "ROT" => apply_forth_operation(stack, &token_upc),
             "CR" | "." | "EMIT" | ".\"" => apply_output_operation(stack, &token_upc, &mut tokens),
-            "IF" | "THEN" => apply_conditional_operation(stack, &token_upc, &mut tokens),
+            "IF" | "THEN" => apply_conditional_operation(stack, &token_upc, &mut tokens, word_map),
             _ => default_operation(stack, &token_upc),
         };
 
