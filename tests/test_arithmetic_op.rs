@@ -107,4 +107,21 @@ mod arithmetic_operations_test {
         let result = apply_arithmetic_operation(&mut stack, "/");
         assert_eq!(result, Err("stack-underflow".to_string()));
     }
+
+    #[test]
+    fn test_chained_arithmetic_operations() {
+        let mut stack = setup_stack();
+
+        stack.push(3);
+        stack.push(4);
+        assert_eq!(apply_arithmetic_operation(&mut stack, "+"), Ok(()));
+
+        stack.push(2);
+        assert_eq!(apply_arithmetic_operation(&mut stack, "*"), Ok(()));
+
+        stack.push(5);
+        assert_eq!(apply_arithmetic_operation(&mut stack, "-"), Ok(()));
+
+        assert_eq!(stack.pop(), Some(9));
+    }
 }

@@ -214,4 +214,21 @@ mod boolean_operations_test {
         let result = apply_boolean_operation(&mut stack, "OR");
         assert_eq!(result, Err("stack-underflow".to_string()));
     }
+
+    #[test]
+    fn test_chained_boolean_operations() {
+        let mut stack = setup_stack();
+
+        stack.push(5);
+        stack.push(5);
+        assert_eq!(apply_boolean_operation(&mut stack, "="), Ok(()));
+
+        stack.push(3);
+        stack.push(2);
+        assert_eq!(apply_boolean_operation(&mut stack, ">"), Ok(()));
+
+        assert_eq!(apply_boolean_operation(&mut stack, "AND"), Ok(()));
+
+        assert_eq!(stack.pop(), Some(-1));
+    }
 }

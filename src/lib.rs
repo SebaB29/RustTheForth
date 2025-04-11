@@ -6,4 +6,4 @@ pub mod forth_basic_operations;
 pub mod output_operations;
 pub mod program;
 pub mod stack;
-mod word_definitions;
+pub mod word_definitions;
