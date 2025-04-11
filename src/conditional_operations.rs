@@ -83,7 +83,7 @@ fn parse_conditional_branches(
     let mut depth = 0;
     let mut then_found = false;
 
-    while let Some(token) = tokens.next() {
+    for token in tokens.by_ref() {
         let token_up = token.to_uppercase();
 
         match token_up.as_str() {

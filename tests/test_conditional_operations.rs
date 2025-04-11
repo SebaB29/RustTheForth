@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use forth_interpreter::conditional_operations::apply_conditional_operation;
 use forth_interpreter::stack::Stack;
+use std::collections::HashMap;
 
 #[cfg(test)]
 mod conditional_operations_test {
