@@ -77,7 +77,7 @@ rust-the-forth/
 └── Cargo.toml          # Project metadata
 ```
 
-## 🛠️ Technologies
+# 🛠️ Technologies
 * **Language**: Rust (v1.85+).
 * **Environment**: Unix / Linux.
 * **Standard Library**: `std::env`, `std::fs`, `std::io`
