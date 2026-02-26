@@ -1,87 +1,86 @@
 # ⚙️ Rust the Forth
 
-## 📜 Table of Contents
+A robust, memory-safe **Forth-79 Standard** interpreter built from scratch in **Rust**. This project implements a stack-based execution engine, custom word definitions, and strict error handling without relying on external dependencies or unsafe code.
 
-- [Features](#features)
-- [Technologies](#technologies)
-- [Usage](#usage)
-- [Testing](#testing)
-- [License](#license)
-- [About This Project](#about)
+# 📍 Table of Contents
+- [📝 Description](#-description)
+  - [🧩 Key Features](#-key-features)
+  - [🏗️ Design Constraints](#️-design-constraints)
+- [🚀 Usage](#-usage)
+  - [⌨️ Commands & Operations](#️-commands--operations)
+- [🧪 Testing & Quality](#-testing--quality)
+- [📁 Structure](#-structure)
+- [🛠️ Technologies](#️-technologies)
+- [📄 License](#-license)
 
-## ✨ Features <a name="features"></a>
+# 📝 Description
+Developed for **Taller de Programación I (FIUBA)**, this interpreter replicates the core mechanics of Forth. It utilizes a stack-based architecture where operations pop arguments and push results, supporting both standard arithmetic and complex conditional logic.
 
-- Integer arithmetic: `+`, `-`, `*`, `/`
-- Stack manipulation: `DUP`, `DROP`, `SWAP`, `OVER`, `ROT`
-- Word definition: `: <word> <body> ;`
-- Output operations: `.`, `EMIT`, `CR`, `." message"`
-- Boolean logic: `=`, `<`, `>`, `AND`, `OR`, `NOT`
-- Conditional execution: `IF ... THEN`, `IF ... ELSE ... THEN`
-- Stack saved to `stack.fth` after execution
-- Error messages for common issues: `stack-underflow`, `division-by-zero`, `invalid-word`, etc.
+## 🧩 Key Features
+- **Stack Manipulation:** Full support for `DUP`, `DROP`, `SWAP`, `OVER`, and `ROT`.
+- **Word Definitions:** Dynamic dictionary expansion using `: <name> <body> ;`.
+- **Control Flow:** Conditional execution with `IF ... ELSE ... THEN` blocks.
+- **Persistence:** Automatic state preservation; the final stack is saved to `stack.fth` after execution.
+- **Configurable Memory:** Custom stack size allocation via CLI arguments.
 
-## 🔧 Technologies <a name="technologies"></a>
+## 🏗️ Design Constraints
+This project adheres to the strictest Rust development standards:
+- **No Unsafe:** 100% safe Rust code.
+- **No Panics:** Zero use of `.unwrap()`, `.expect()`, `panic!()`, or `exit()`.
+- **Zero Dependencies:** Relies exclusively on the Rust Standard Library (`std`).
+- **Standard Compliant:** Formatted with `cargo fmt` and verified with `clippy`.
 
-- **Language**: Rust (version 1.85)
-- **Tooling**: Cargo
-- **Testing**: `cargo test` (unit + integration tests)
-- **Linting**: Clippy (no warnings)
-- **Formatting**: `cargo fmt`
-- **Documentation**: `cargo doc`
-- **Platform**: Unix / Linux only
+# 🚀 Usage
 
-> ❗ No crates, `.unwrap()`, `.expect()`, `panic!()`, `exit()` or `unsafe` blocks allowed.
-
-## ▶️ Usage <a name="usage"></a>
-
-Build the project:
-
+### Build
 ```bash
 cargo build --release
 ```
 
-Run the interpreter with a `.fth` file:
-
+### Run
+Execute a Forth script by providing its path:
 ```bash
-cargo run -- path/to/file.fth
+cargo run -- path/to/script.fth
 ```
 
-Optionally, set a custom stack size in bytes (default: 128 KB):
-
+Optionally, define a custom stack size (in bytes):
 ```bash
-cargo run -- path/to/file.fth stack-size=262144
+cargo run -- path/to/script.fth stack-size=262144
 ```
 
-### Example `.fth` File
+## ⌨️ Commands & Operations
+| Category   | Operations                           |
+|------------|--------------------------------------|
+| Arithmetic | `+`, `-`, `*`, `/`                   |
+| Logic      | `=`, `<`, `>`, `AND`, `OR`, `NOT`    |
+| Stack      | `DUP`, `DROP`, `SWAP`, `OVER`, `ROT` |
+| I/O        | `.`, `EMIT`, `CR`, `." <message>"`   |
 
-```forth
-: HELLO CR ." Hello, World!" ;
-HELLO
-```
-
-Output:
-
-```
-Hello, World!
-```
-
-Final stack is saved to `stack.fth`.
-
-## 🧪 Testing <a name="testing"></a>
-
-Run all unit and integration tests:
-
+# 🧪 Testing & Quality
+The project includes a comprehensive suite of unit and integration tests to ensure interpreter parity with the Forth-79 standard.
 ```bash
 cargo test
 ```
+* Clippy: No warnings allowed.
+* Docs: Fully documented using cargo doc.
 
-## 📄 License <a name="license"></a>
+# 📁 Structure
+```text
+rust-the-forth/
+├── src/
+│   ├── main.rs         # Entry point & CLI parsing
+│   ├── interpreter.rs  # Core execution logic
+│   ├── stack.rs        # Stack implementation
+│   └── dictionary.rs   # Word definitions & lookup
+├── tests/              # Integration tests with .fth files
+├── Enunciado.pdf       # Academic requirements
+└── Cargo.toml          # Project metadata
+```
 
-This project is released under the MIT License. See `LICENSE` for details.
+## 🛠️ Technologies
+* **Language**: Rust (v1.85+).
+* **Environment**: Unix / Linux.
+* **Standard Library**: `std::env`, `std::fs`, `std::io`
 
-## 📚 About This Project <a name="about"></a>
-
-This interpreter was developed as part of an individual academic exercise for the subject Taller de Programación I (1C 2025).  
-The goal was to replicate core features of the Forth-79 standard using only Rust's standard library, without external dependencies, and following strict memory and error-handling guidelines.
-
-For more details, please refer to the enunciado.pdf file.
+# 📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
